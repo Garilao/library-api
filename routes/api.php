@@ -6,25 +6,28 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use Illuminate\Http\Request;
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Public
+Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class,'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class,'logout']);
 
-    Route::get('/user', function (Request $r) {
-        return $r->user();
+    // Admin only
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/books', [BookController::class,'store']);
+        Route::put('/books/{book}', [BookController::class,'update']);
+        Route::delete('/books/{book}', [BookController::class,'destroy']);
+        Route::get('/borrow/history', [BorrowController::class,'history']);
     });
 
-    // Book routes
-    Route::get('/books', [BookController::class, 'index']);
-    Route::get('/books/{book}', [BookController::class, 'show']);
-    Route::post('/books', [BookController::class, 'store']);
-    Route::put('/books/{book}', [BookController::class, 'update']);
-    Route::delete('/books/{book}', [BookController::class, 'destroy']);
+    // Everyone authenticated
+    Route::get('/books', [BookController::class,'index']);
+    Route::get('/books/{book}', [BookController::class,'show']);
 
-    // Borrowing routes
-    Route::post('/borrow', [BorrowController::class, 'borrow']);
-    Route::post('/return', [BorrowController::class, 'return']);
-    Route::get('/borrow/history', [BorrowController::class, 'history']);
+    // Borrowing (users only)
+    Route::middleware('role:student,admin')->group(function () {
+        Route::post('/borrow', [BorrowController::class,'borrow']);
+        Route::post('/return', [BorrowController::class,'return']);
+    });
 });
