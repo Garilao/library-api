@@ -6,8 +6,44 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="Library API Documentation",
+ *      description="API for managing books and borrow records.",
+ * )
+ *
+ * @OA\SecurityScheme(
+ *      securityScheme="sanctum",
+ *      type="apiKey",
+ *      in="header",
+ *      name="Authorization"
+ * )
+ */
 class AuthController extends Controller
+
 {
+/**
+ * @OA\Post(
+ *     path="/api/register",
+ *     summary="Register a new user",
+ *     tags={"Authentication"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"name","email","password","password_confirmation"},
+ *             @OA\Property(property="name", type="string", example="John Doe"),
+ *             @OA\Property(property="email", type="string", example="john@example.com"),
+ *             @OA\Property(property="password", type="string", example="password123"),
+ *             @OA\Property(property="password_confirmation", type="string", example="password123")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=201,
+ *         description="User registered successfully"
+ *     )
+ * )
+ */
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -26,6 +62,22 @@ class AuthController extends Controller
         $token = $user->createToken('api_token')->plainTextToken;
         return response()->json(['user'=>$user,'token'=>$token],201);
     }
+/**
+ * @OA\Post(
+ *     path="/api/login",
+ *     summary="Authenticate user and return token",
+ *     tags={"Authentication"},
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\JsonContent(
+ *             required={"email","password"},
+ *             @OA\Property(property="email", type="string", example="john@example.com"),
+ *             @OA\Property(property="password", type="string", example="password123")
+ *         )
+ *     ),
+ *     @OA\Response(response=200, description="Login successful")
+ * )
+ */
 
     public function login(Request $request)
     {

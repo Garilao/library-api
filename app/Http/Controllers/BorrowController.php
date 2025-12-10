@@ -7,8 +7,32 @@ use App\Models\BorrowRecord;
 use App\Models\Book;
 use Carbon\Carbon;
 
+/**
+ * @OA\Tag(
+ *     name="Borrow",
+ *     description="Borrow and return book endpoints"
+ * )
+ */
+
 class BorrowController extends Controller
 {
+/**
+ * @OA\Post(
+ *     path="/api/borrow",
+ *     summary="Borrow a book",
+ *     tags={"Borrow"},
+ *     security={{"sanctum":{}}},
+ *     @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(
+ *              required={"book_id"},
+ *              @OA\Property(property="book_id", type="integer", example=1),
+ *              @OA\Property(property="days", type="integer", example=14)
+ *          )
+ *     ),
+ *     @OA\Response(response=201, description="Book borrowed successfully")
+ * )
+ */
 
     public function borrow(Request $request)
     {
@@ -37,6 +61,22 @@ class BorrowController extends Controller
 
         return response()->json($record,201);
     }
+/**
+ * @OA\Post(
+ *     path="/api/return",
+ *     summary="Return a borrowed book",
+ *     tags={"Borrow"},
+ *     security={{"sanctum":{}}},
+ *     @OA\RequestBody(
+ *          required=true,
+ *          @OA\JsonContent(
+ *              required={"borrow_id"},
+ *              @OA\Property(property="borrow_id", type="integer", example=1)
+ *          )
+ *     ),
+ *     @OA\Response(response=200, description="Book returned successfully")
+ * )
+ */
 
     public function return(Request $request)
     {
