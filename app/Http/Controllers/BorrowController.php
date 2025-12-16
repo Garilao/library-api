@@ -103,7 +103,15 @@ class BorrowController extends Controller
 
         return response()->json($record);
     }
-
+    /**
+     * @OA\Get(
+     *     path="/api/borrow/history",
+     *     summary="Get borrow history (admin only)",
+     *     tags={"Borrow"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(response=200, description="Borrow history retrieved")
+     * )
+     */
     public function history(Request $request)
     {
         $user = $request->user();

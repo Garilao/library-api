@@ -31,19 +31,24 @@ class AuthController extends Controller
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
- *             required={"name","email","password","password_confirmation"},
+ *             required={"name","email","password"},
  *             @OA\Property(property="name", type="string", example="John Doe"),
  *             @OA\Property(property="email", type="string", example="john@example.com"),
- *             @OA\Property(property="password", type="string", example="password123"),
- *             @OA\Property(property="password_confirmation", type="string", example="password123")
+ *             @OA\Property(property="password", type="string", example="password"),
+ *             @OA\Property(property="password_confirmation", type="string", example="password")
  *         )
  *     ),
- *     @OA\Response(
- *         response=201,
- *         description="User registered successfully"
- *     )
+ *     @OA\Response(response=201, description="User registered successfully")
  * )
  */
+
+/**
+ * @OA\Tag(
+ *     name="Authentication",
+ *     description="User authentication endpoints"
+ * )
+ */
+
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -65,17 +70,17 @@ class AuthController extends Controller
 /**
  * @OA\Post(
  *     path="/api/login",
- *     summary="Authenticate user and return token",
+ *     summary="Login user",
  *     tags={"Authentication"},
  *     @OA\RequestBody(
  *         required=true,
  *         @OA\JsonContent(
  *             required={"email","password"},
  *             @OA\Property(property="email", type="string", example="john@example.com"),
- *             @OA\Property(property="password", type="string", example="password123")
+ *             @OA\Property(property="password", type="string", example="password")
  *         )
  *     ),
- *     @OA\Response(response=200, description="Login successful")
+ *     @OA\Response(response=200, description="User logged in")
  * )
  */
 
@@ -95,6 +100,16 @@ class AuthController extends Controller
         $token = $user->createToken('api_token')->plainTextToken;
         return response()->json(['user'=>$user,'token'=>$token],200);
     }
+
+/**
+ * @OA\Post(
+ *     path="/api/logout",
+ *     summary="Logout user",
+ *     tags={"Authentication"},
+ *     security={{"sanctum":{}}},
+ *     @OA\Response(response=200, description="Logged out successfully")
+ * )
+ */
 
     public function logout(Request $request)
     {

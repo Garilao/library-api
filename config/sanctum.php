@@ -75,10 +75,14 @@ return [
     |
     */
 
+    // 'middleware' => [
+    //     'authenticate_session' => Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
+    //     'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
+    //     'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+    // ],
     'middleware' => [
+        // For APIs, Sanctum only needs this one middleware:
         'authenticate_session' => Laravel\Sanctum\Http\Middleware\AuthenticateSession::class,
-        'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
-        'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
 ];

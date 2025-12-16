@@ -14,14 +14,17 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
 
-    /**
-     * @OA\Get(
-     *     path="/api/books",
-     *     summary="Get all books",
-     *     tags={"Books"},
-     *     @OA\Response(response=200, description="List of books")
-     * )
-     */
+/**
+ * @OA\Get(
+ *     path="/api/books",
+ *     summary="Get all books",
+ *     tags={"Books"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of all books"
+ *     )
+ * )
+ */
     public function index()
     {
         // FIX: wrong function "paginated"
@@ -74,7 +77,7 @@ class BookController extends Controller
     /**
      * @OA\Get(
      *     path="/api/books/{id}",
-     *     summary="Get book by ID",
+     *     summary="Get a book by ID",
      *     tags={"Books"},
      *     @OA\Parameter(
      *         name="id",
@@ -82,7 +85,10 @@ class BookController extends Controller
      *         required=true,
      *         description="Book ID"
      *     ),
-     *     @OA\Response(response=200, description="Book details")
+     *     @OA\Response(
+     *         response=200,
+     *         description="Book details"
+     *     )
      * )
      */
     public function show(Book $book)
